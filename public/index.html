@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Viewer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: #4ec9b0;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .controls {
+      background-color: #252526;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .controls label {
+      font-weight: 500;
+    }
+
+    .controls input[type="number"] {
+      background-color: #3c3c3c;
+      color: #d4d4d4;
+      border: 1px solid #555;
+      padding: 8px 12px;
+      border-radius: 3px;
+      font-size: 14px;
+      width: 100px;
+    }
+
+    .controls button {
+      background-color: #0e639c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+
+    .controls button:hover {
+      background-color: #1177bb;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #4ec9b0;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .log-container {
+      background-color: #1e1e1e;
+      border: 1px solid #3c3c3c;
+      border-radius: 5px;
+      height: calc(100vh - 220px);
+      overflow-y: auto;
+      padding: 15px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    .log-entry {
+      padding: 8px;
+      border-bottom: 1px solid #2d2d30;
+      line-height: 1.5;
+    }
+
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+
+    .log-entry.new-entry {
+      animation: highlight 1s ease-out;
+    }
+
+    @keyframes highlight {
+      0% {
+        background-color: #264f78;
+      }
+      100% {
+        background-color: transparent;
+      }
+    }
+
+    .timestamp {
+      color: #608b4e;
+      margin-right: 10px;
+    }
+
+    .fountain {
+      color: #4ec9b0;
+      margin-right: 10px;
+      font-weight: bold;
+      min-width: 60px;
+      display: inline-block;
+      text-align: right;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    .message {
+      color: #ce9178;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #6a6a6a;
+      padding: 40px;
+      font-size: 14px;
+    }
+
+    .log-container::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .log-container::-webkit-scrollbar-track {
+      background: #1e1e1e;
+    }
+
+    .log-container::-webkit-scrollbar-thumb {
+      background: #424242;
+      border-radius: 5px;
+    }
+
+    .log-container::-webkit-scrollbar-thumb:hover {
+      background: #4e4e4e;
+    }
+
+    .datetime-controls {
+      background-color: #2d2d30;
+      border-left: 3px solid #4ec9b0;
+    }
+
+    .controls input[type="datetime-local"] {
+      background-color: #3c3c3c;
+      color: #d4d4d4;
+      border: 1px solid #555;
+      padding: 8px 12px;
+      border-radius: 3px;
+      font-size: 14px;
+      width: 200px;
+    }
+
+    .status.frozen .status-indicator {
+      background-color: #ce9178;
+      animation: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Bee Fountain Log</h1>
+
+    <div class="controls">
+      <label for="numLines">Show last</label>
+      <input type="number" id="numLines" value="50" min="1" max="1000">
+      <label>lines</label>
+      <label for="fountainFilter" style="margin-left: 15px;">Filter by fountain:</label>
+      <input type="number" id="fountainFilter" placeholder="All" min="-32768" max="32767" style="width: 100px;">
+      <button onclick="updateLogs()">Refresh</button>
+      <div class="status">
+        <span class="status-indicator"></span>
+        <span>Live</span>
+      </div>
+    </div>
+
+    <div class="controls datetime-controls">
+      <label for="datetime-input">View logs from:</label>
+      <input type="datetime-local" id="datetime-input" step="1" title="Enter date and time in 24-hour format (HH:mm:ss)">
+      <label for="fountainFilterHistorical" style="margin-left: 15px;">Filter by fountain:</label>
+      <input type="number" id="fountainFilterHistorical" placeholder="All" min="-32768" max="32767" style="width: 100px;">
+      <button onclick="loadLogsFromTimestamp()">Load from Time</button>
+      <button id="returnToLiveBtn" onclick="returnToLive()" style="display: none;">Return to Live View</button>
+      <span id="historicalModeIndicator" style="display: none; color: #ce9178; margin-left: 10px;">
+        📌 Historical View
+      </span>
+    </div>
+
+    <div class="log-container" id="logContainer">
+      <div class="empty-state">No log entries yet. Waiting for UDP messages on port 8889...</div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const logContainer = document.getElementById('logContainer');
+    const numLinesInput = document.getElementById('numLines');
+
+    let autoScroll = true;
+    let isLiveMode = true;
+
+    // Check if user is scrolled to bottom
+    logContainer.addEventListener('scroll', () => {
+      const isScrolledToBottom = logContainer.scrollHeight - logContainer.clientHeight <= logContainer.scrollTop + 1;
+      autoScroll = isScrolledToBottom;
+    });
+
+    // Load initial logs
+    async function updateLogs() {
+      const numLines = parseInt(numLinesInput.value) || 50;
+      const fountainFilter = document.getElementById('fountainFilter').value;
+
+      try {
+        let url = `/api/logs/${numLines}`;
+        if (fountainFilter !== '') {
+          url += `?fountain=${encodeURIComponent(fountainFilter)}`;
+        }
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.error) {
+          logContainer.innerHTML = `<div class="empty-state">Error: ${data.error}</div>`;
+          return;
+        }
+
+        if (!data.entries || data.entries.length === 0) {
+          logContainer.innerHTML = '<div class="empty-state">No log entries yet. Waiting for UDP messages on port 8889...</div>';
+        } else {
+          logContainer.innerHTML = data.entries.map(entry => formatLogEntry(entry)).join('');
+
+          if (autoScroll) {
+            scrollToBottom();
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching logs:', error);
+        logContainer.innerHTML = '<div class="empty-state">Failed to load logs. Please check server connection.</div>';
+      }
+    }
+
+    // Load logs from a specific timestamp
+    async function loadLogsFromTimestamp() {
+      const datetimeInput = document.getElementById('datetime-input');
+      const dateTimeValue = datetimeInput.value;
+      const fountainFilterHistorical = document.getElementById('fountainFilterHistorical').value;
+
+      if (!dateTimeValue) {
+        alert('Please select a date and time');
+        return;
+      }
+
+      // Validate date
+      const dateObj = new Date(dateTimeValue);
+      if (isNaN(dateObj.getTime())) {
+        alert('Invalid date/time selected');
+        return;
+      }
+
+      // Convert to ISO 8601
+      const isoTimestamp = dateObj.toISOString();
+
+      try {
+        let url = `/api/logs/from?timestamp=${encodeURIComponent(isoTimestamp)}`;
+        if (fountainFilterHistorical !== '') {
+          url += `&fountain=${encodeURIComponent(fountainFilterHistorical)}`;
+        }
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.error) {
+          alert(`Error: ${data.error}`);
+          return;
+        }
+
+        if (!data.entries || data.entries.length === 0) {
+          logContainer.innerHTML = `<div class="empty-state">No logs found after ${dateTimeValue}</div>`;
+        } else {
+          logContainer.innerHTML = data.entries.map(entry => formatLogEntry(entry)).join('');
+          scrollToBottom();
+        }
+
+        // Enter frozen mode
+        enterFrozenMode();
+
+      } catch (error) {
+        console.error('Error fetching logs from timestamp:', error);
+        alert('Failed to load logs. Please try again.');
+      }
+    }
+
+    // Enter frozen (historical) mode
+    function enterFrozenMode() {
+      isLiveMode = false;
+
+      // Update UI
+      document.getElementById('returnToLiveBtn').style.display = 'inline-block';
+      document.getElementById('historicalModeIndicator').style.display = 'inline';
+
+      const statusDiv = document.querySelector('.status');
+      statusDiv.classList.add('frozen');
+      statusDiv.querySelector('span:last-child').textContent = 'Historical';
+    }
+
+    // Return to live mode
+    function returnToLive() {
+      isLiveMode = true;
+
+      // Update UI
+      document.getElementById('returnToLiveBtn').style.display = 'none';
+      document.getElementById('historicalModeIndicator').style.display = 'none';
+      document.getElementById('datetime-input').value = '';
+      document.getElementById('fountainFilterHistorical').value = '';
+
+      const statusDiv = document.querySelector('.status');
+      statusDiv.classList.remove('frozen');
+      statusDiv.querySelector('span:last-child').textContent = 'Live';
+
+      // Reload latest logs
+      updateLogs();
+    }
+
+    // Listen for new log entries
+    socket.on('newLogEntry', (data) => {
+      // Ignore new entries when in frozen (historical) mode
+      if (!isLiveMode) {
+        return;
+      }
+
+      const emptyState = logContainer.querySelector('.empty-state');
+      if (emptyState) {
+        logContainer.innerHTML = '';
+      }
+
+      const logEntry = document.createElement('div');
+      logEntry.className = 'log-entry new-entry';
+
+      const timestamp = new Date(data.timestamp);
+      const formattedTime = timestamp.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+
+      logEntry.innerHTML = `
+        <span class="timestamp">[${formattedTime}]</span>
+        <span class="fountain">${data.fountain}</span>
+        <span class="message">${escapeHtml(data.message)}</span>
+      `;
+
+      logContainer.appendChild(logEntry);
+
+      // Trim to keep only the last n lines
+      const numLines = parseInt(numLinesInput.value) || 50;
+      const entries = logContainer.querySelectorAll('.log-entry');
+      if (entries.length > numLines) {
+        for (let i = 0; i < entries.length - numLines; i++) {
+          entries[i].remove();
+        }
+      }
+
+      if (autoScroll) {
+        scrollToBottom();
+      }
+    });
+
+    // Format a log entry object into HTML
+    function formatLogEntry(entry) {
+      const timestamp = new Date(entry.timestamp);
+      const formattedTime = timestamp.toLocaleString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+
+      return `<div class="log-entry">
+        <span class="timestamp">[${formattedTime}]</span>
+        <span class="fountain">${entry.fountain}</span>
+        <span class="message">${escapeHtml(entry.message)}</span>
+      </div>`;
+    }
+
+    function scrollToBottom() {
+      logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Load logs on page load
+    updateLogs();
+
+    // Allow Enter key to refresh
+    numLinesInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        updateLogs();
+      }
+    });
+
+    document.getElementById('fountainFilter').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        updateLogs();
+      }
+    });
+
+    document.getElementById('fountainFilterHistorical').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        loadLogsFromTimestamp();
+      }
+    });
+  </script>
+</body>
+</html>

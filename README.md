@@ -18,6 +18,13 @@ npm install
 
 ## Usage
 
+Create an .env file that contains:
+DB_PORT=3306
+DB_DATABASE=FountainLogs
+DB_USER=xxxxxxx
+DB_PASSWORD=xxxxxxx
+DB_HOST=xxxxxxxxxx
+
 1. Start the server:
 ```bash
 npm start

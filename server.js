@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const { createServer } = require('http');
 const { Server } = require('socket.io');
@@ -14,11 +14,11 @@ const HTTP_PORT = 3000;
 
 // MySQL Database Configuration
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
+  host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT) || 3306,
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_DATABASE || 'fountain_logs',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
   connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT) || 10,
   waitForConnections: true,
   queueLimit: 0
@@ -36,10 +36,9 @@ async function initializeDatabase() {
       CREATE TABLE IF NOT EXISTS logs (
         id INT AUTO_INCREMENT PRIMARY KEY,
         timestamp DATETIME(3) NOT NULL,
-        fountain SMALLINT NOT NULL,
+        fountain TINYINT(1) UNSIGNED NOT NULL,
         message VARCHAR(1024) NOT NULL,
-        INDEX idx_timestamp (timestamp),
-        INDEX idx_fountain (fountain)
+        INDEX idx_timestamp (timestamp)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `);
     console.log('✓ Database table initialized');

@@ -4,13 +4,65 @@ const { createServer } = require('http');
 const { Server } = require('socket.io');
 const dgram = require('dgram');
 const mysql = require('mysql2/promise');
+const fs = require('fs');
+const path = require('path');
+
+// Console logging to file setup
+const LOG_FILE = path.join(__dirname, 'fountainlogger.log');
+const originalConsole = {
+  log: console.log,
+  error: console.error,
+  warn: console.warn,
+  info: console.info
+};
+
+function writeToLogFile(level, args) {
+  const timestamp = new Date().toLocaleString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+  const message = args.map(arg =>
+    typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+  ).join(' ');
+  const logEntry = `[${timestamp}] [${level}] ${message}\n`;
+
+  try {
+    fs.appendFileSync(LOG_FILE, logEntry, 'utf8');
+  } catch (err) {
+    originalConsole.error('Failed to write to log file:', err);
+  }
+}
+
+console.log = function(...args) {
+  writeToLogFile('LOG', args);
+  originalConsole.log(...args);
+};
+
+console.error = function(...args) {
+  writeToLogFile('ERROR', args);
+  originalConsole.error(...args);
+};
+
+console.warn = function(...args) {
+  writeToLogFile('WARN', args);
+  originalConsole.warn(...args);
+};
+
+console.info = function(...args) {
+  writeToLogFile('INFO', args);
+  originalConsole.info(...args);
+};
 
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
 const UDP_PORT = 8889;
-const HTTP_PORT = 3000;
 
 // MySQL Database Configuration
 const dbConfig = {
@@ -228,8 +280,8 @@ io.on('connection', (socket) => {
 
 // Initialize database then start HTTP server
 initializeDatabase().then(() => {
-  httpServer.listen(HTTP_PORT, () => {
-    console.log(`HTTP server listening on http://localhost:${HTTP_PORT}`);
+  httpServer.listen(process.env.HTTP_PORT, () => {
+    console.log(`HTTP server listening on http://localhost:${process.env.HTTP_PORT}`);
     console.log(`UDP server listening on port ${UDP_PORT}`);
   });
 }).catch(err => {

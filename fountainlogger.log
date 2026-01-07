@@ -1,0 +1,12 @@
+[01/06/2026, 19:24:02] [ERROR] UDP server error:
+Error: bind EADDRINUSE 0.0.0.0:8889
+    at node:dgram:399:20
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[01/06/2026, 19:24:05] [LOG] ✓ MySQL database connected
+[01/06/2026, 19:24:05] [LOG] ✓ Database table initialized
+[01/06/2026, 19:24:16] [ERROR] UDP server error:
+Error: bind EADDRINUSE 0.0.0.0:8889
+    at node:dgram:399:20
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+[01/06/2026, 19:24:18] [LOG] ✓ MySQL database connected
+[01/06/2026, 19:24:18] [LOG] ✓ Database table initialized

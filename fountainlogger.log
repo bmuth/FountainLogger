@@ -10,3 +10,93 @@ Error: bind EADDRINUSE 0.0.0.0:8889
     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
 [01/06/2026, 19:24:18] [LOG] ✓ MySQL database connected
 [01/06/2026, 19:24:18] [LOG] ✓ Database table initialized
+[01/06/2026, 20:00:41] [LOG] UDP server listening on 0.0.0.0:8889
+[01/06/2026, 20:00:41] [ERROR] ✗ Database initialization failed: {"errno":-111,"code":"ECONNREFUSED","syscall":"connect","address":"::1","port":3306,"fatal":true}
+[01/06/2026, 20:00:41] [ERROR]   Make sure MariaDB is running and credentials in .env are correct
+[01/06/2026, 20:04:51] [LOG] UDP server listening on 0.0.0.0:8889
+[01/06/2026, 20:04:51] [ERROR] ✗ Database initialization failed: {"errno":-3008,"code":"ENOTFOUND","syscall":"getaddrinfo","hostname":"rock-5c.local","fatal":true}
+[01/06/2026, 20:04:51] [ERROR]   Make sure MariaDB is running and credentials in .env are correct
+[01/06/2026, 20:05:38] [LOG] UDP server listening on 0.0.0.0:8889
+[01/06/2026, 20:05:38] [LOG] ✓ MySQL database connected
+[01/06/2026, 20:05:38] [LOG] ✓ Database table initialized
+[01/06/2026, 20:09:17] [LOG] UDP server listening on 0.0.0.0:8889
+[01/06/2026, 20:09:17] [LOG] ✓ MySQL database connected
+[01/06/2026, 20:09:17] [LOG] ✓ Database table initialized
+[01/06/2026, 20:09:47] [LOG] UDP server listening on 0.0.0.0:8889
+[01/06/2026, 20:09:47] [LOG] ✓ MySQL database connected
+[01/06/2026, 20:09:47] [LOG] ✓ Database table initialized
+[01/06/2026, 20:09:47] [LOG] HTTP server listening on http://localhost:4000
+[01/06/2026, 20:09:47] [LOG] UDP server listening on port 8889
+[01/06/2026, 20:10:12] [LOG] Client connected: AxqX17IRS6znO_a5AAAB
+[01/06/2026, 20:15:12] [LOG] Received UDP from 192.168.1.10:51197 - 100 Test message from database - Random: 627
+[01/06/2026, 20:15:12] [LOG] ✓ Logged [ID: 5] 100 | Test message from database - Random: 627
+[01/13/2026, 14:11:03] [LOG] UDP server listening on 0.0.0.0:8889
+[01/13/2026, 14:11:04] [LOG] ✓ MySQL database connected
+[01/13/2026, 14:11:04] [LOG] ✓ Database table initialized
+[01/13/2026, 14:11:04] [LOG] HTTP server listening on http://localhost:4000
+[01/13/2026, 14:11:04] [LOG] UDP server listening on port 8889
+[01/13/2026, 14:11:22] [LOG] Client connected: 3aFc4BGzbCs80-NGAAAB
+[01/13/2026, 14:23:06] [LOG] Received UDP from 192.168.1.111:8888 - <1>User pumped 1 seconds
+[01/13/2026, 14:23:06] [WARN] Invalid fountain number: "<1>User" (must be between -32768 and 32767)
+[01/13/2026, 14:23:06] [ERROR] Failed to parse, skipping: <1>User pumped 1 seconds
+[01/13/2026, 14:26:08] [LOG] Client disconnected: 3aFc4BGzbCs80-NGAAAB
+[01/13/2026, 14:26:08] [LOG] Client connected: 3xAKG7w_yzlh_wKnAAAD
+[01/13/2026, 14:31:10] [LOG] Received UDP from 192.168.1.111:8888 - <1>Wifi connected
+[01/13/2026, 14:31:10] [WARN] Invalid fountain number: "<1>Wifi" (must be between -32768 and 32767)
+[01/13/2026, 14:31:10] [ERROR] Failed to parse, skipping: <1>Wifi connected
+[01/13/2026, 14:31:51] [LOG] Client disconnected: 3xAKG7w_yzlh_wKnAAAD
+[01/13/2026, 14:31:51] [LOG] Client connected: qpmWOxAK4yHIBXKEAAAF
+[01/13/2026, 14:36:51] [LOG] Received UDP from 192.168.1.111:8888 - 1 Wifi connected
+[01/13/2026, 14:36:51] [LOG] ✓ Logged [ID: 6] 1 | Wifi connected
+[01/13/2026, 14:38:13] [LOG] Received UDP from 192.168.1.111:8888 - 1 Wifi connected
+[01/13/2026, 14:38:13] [LOG] ✓ Logged [ID: 7] 1 | Wifi connected
+[01/13/2026, 15:14:38] [LOG] Received UDP from 192.168.1.111:64163 - 1 Connected toChula rssi -43
+[01/13/2026, 15:14:38] [LOG] Received UDP from 192.168.1.111:64163 - 1 BeeWaterFeature started
+[01/13/2026, 15:14:38] [LOG] Received UDP from 192.168.1.111:8888 - 1 Wifi connected. UDP client started.
+[01/13/2026, 15:14:38] [LOG] ✓ Logged [ID: 8] 1 | Connected toChula rssi -43
+[01/13/2026, 15:14:38] [LOG] ✓ Logged [ID: 9] 1 | BeeWaterFeature started
+[01/13/2026, 15:14:38] [LOG] ✓ Logged [ID: 10] 1 | Wifi connected. UDP client started.
+[01/13/2026, 15:18:23] [LOG] Received UDP from 192.168.1.111:8888 - 1 User performed single click
+[01/13/2026, 15:18:23] [LOG] Received UDP from 192.168.1.111:8888 - 1 sensor: 1151
+[01/13/2026, 15:18:23] [LOG] ✓ Logged [ID: 11] 1 | User performed single click
+[01/13/2026, 15:18:23] [LOG] ✓ Logged [ID: 12] 1 | sensor: 1151
+[01/13/2026, 15:19:21] [LOG] Received UDP from 192.168.1.111:8888 - 1 User performed single click
+[01/13/2026, 15:19:21] [LOG] Received UDP from 192.168.1.111:8888 - 1 sensor: 1676
+[01/13/2026, 15:19:21] [LOG] ✓ Logged [ID: 13] 1 | User performed single click
+[01/13/2026, 15:19:21] [LOG] ✓ Logged [ID: 14] 1 | sensor: 1676
+[01/13/2026, 15:19:39] [LOG] Received UDP from 192.168.1.111:8888 - 1 User performed single click
+[01/13/2026, 15:19:39] [LOG] Received UDP from 192.168.1.111:8888 - 1 sensor: 0
+[01/13/2026, 15:19:39] [LOG] ✓ Logged [ID: 15] 1 | User performed single click
+[01/13/2026, 15:19:39] [LOG] ✓ Logged [ID: 16] 1 | sensor: 0
+[01/13/2026, 15:20:40] [LOG] Received UDP from 192.168.1.111:8888 - 1 Button pressed. Running pump
+[01/13/2026, 15:20:40] [LOG] ✓ Logged [ID: 17] 1 | Button pressed. Running pump
+[01/13/2026, 15:20:42] [LOG] Received UDP from 192.168.1.111:8888 - 1 User pumped 2 seconds
+[01/13/2026, 15:20:42] [LOG] ✓ Logged [ID: 18] 1 | User pumped 2 seconds
+[01/13/2026, 15:21:19] [LOG] Received UDP from 192.168.1.111:8888 - 1 sensor: 0
+[01/13/2026, 15:21:19] [LOG] Received UDP from 192.168.1.111:8888 - 1 Previous pump run was 420 ago.
+[01/13/2026, 15:21:19] [LOG] Received UDP from 192.168.1.111:8888 - 1 Starting the pump
+[01/13/2026, 15:21:19] [LOG] ✓ Logged [ID: 19] 1 | sensor: 0
+[01/13/2026, 15:21:19] [LOG] ✓ Logged [ID: 20] 1 | Previous pump run was 420 ago.
+[01/13/2026, 15:21:19] [LOG] ✓ Logged [ID: 21] 1 | Starting the pump
+[01/13/2026, 15:21:25] [LOG] Received UDP from 192.168.1.111:8888 - 1 Replenished in 6 seconds
+[01/13/2026, 15:21:25] [LOG] ✓ Logged [ID: 22] 1 | Replenished in 6 seconds
+[01/13/2026, 15:34:13] [LOG] UDP server listening on 0.0.0.0:8889
+[01/13/2026, 15:34:13] [LOG] ✓ MySQL database connected
+[01/13/2026, 15:34:13] [LOG] ✓ Database table initialized
+[01/13/2026, 15:34:13] [LOG] HTTP server listening on http://localhost:4000
+[01/13/2026, 15:34:13] [LOG] UDP server listening on port 8889
+[01/13/2026, 15:35:19] [LOG] Received UDP from 192.168.1.111:8888 - 1 sensor: 1786
+[01/13/2026, 15:35:19] [LOG] ✓ Logged [ID: 23] 1 | sensor: 1786
+[01/13/2026, 15:39:33] [LOG] Client connected: JVdoWhCtOypmDD13AAAB
+[01/13/2026, 15:42:19] [LOG] Received UDP from 192.168.1.111:8888 - 1 sensor: 1758
+[01/13/2026, 15:42:19] [LOG] ✓ Logged [ID: 24] 1 | sensor: 1758
+[01/13/2026, 15:49:19] [LOG] Received UDP from 192.168.1.111:8888 - 1 sensor: 1488
+[01/13/2026, 15:49:19] [LOG] ✓ Logged [ID: 25] 1 | sensor: 1488
+[01/13/2026, 15:56:19] [LOG] Received UDP from 192.168.1.111:8888 - 1 sensor: 68
+[01/13/2026, 15:56:19] [LOG] Received UDP from 192.168.1.111:8888 - 1 Previous pump run was 2094 ago.
+[01/13/2026, 15:56:19] [LOG] Received UDP from 192.168.1.111:8888 - 1 Starting the pump
+[01/13/2026, 15:56:19] [LOG] ✓ Logged [ID: 26] 1 | sensor: 68
+[01/13/2026, 15:56:19] [LOG] ✓ Logged [ID: 27] 1 | Previous pump run was 2094 ago.
+[01/13/2026, 15:56:19] [LOG] ✓ Logged [ID: 28] 1 | Starting the pump
+[01/13/2026, 15:56:24] [LOG] Received UDP from 192.168.1.111:8888 - 1 Replenished in 5 seconds
+[01/13/2026, 15:56:24] [LOG] ✓ Logged [ID: 29] 1 | Replenished in 5 seconds

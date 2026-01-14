@@ -86,3 +86,13 @@ You can modify these settings in `server.js`:
 - **Show last N lines**: Enter the number of lines you want to display
 - **Refresh button**: Manually reload the log entries
 - **Auto-scroll**: The view automatically scrolls to the bottom when new entries arrive (unless you scroll up manually)
+
+## Launching
+
+- npm i -g pm2
+- pm2 start npm -- start
+- npm i -g pm2
+- pm2 start npm --name my-app -- start
+- pm2 save
+- pm2 startup # run the printed command to enable boot start
+- pm2 status | pm2 logs my-app

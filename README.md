@@ -32,7 +32,7 @@ npm start
 
 2. Open your browser and navigate to:
 ```
-http://localhost:3000
+http://localhost:4000
 ```
 
 3. Send UDP messages to port 8889. The messages will appear in real-time on the web page.
@@ -70,7 +70,7 @@ client.send(message, 8889, 'localhost', (err) => {
 You can modify these settings in `server.js`:
 
 - `UDP_PORT`: UDP port to listen on (default: 8889)
-- `HTTP_PORT`: HTTP server port (default: 3000)
+- `HTTP_PORT`: HTTP server port (default: 4000)
 - `LOG_FILE`: Path to the log file (default: app.log in project directory)
 
 ## How It Works
